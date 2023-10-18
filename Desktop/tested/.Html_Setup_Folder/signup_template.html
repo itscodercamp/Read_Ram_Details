@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<style>
+
+</style>
+<body class="" >
+
+
+    <div class="mx-auto mt-3">
+        <div class="alert alert-info d-none shadow" role="alert" id="success-alert">
+            
+        </div>
+        <div class="alert alert-danger d-none shadow" role="alert" id="error-alert">
+    
+        </div>
+    </div>
+
+    <div class='d-flex justify-content-center align-items-center' style="min-height: 80vh; background-color: #f8f9fa;">
+
+    <div class="card p-4 w-50 mt-5">
+        <h2 class="text-center">Sign Up</h2>
+        <form class='row ' enctype="multipart/form-data" id="registration-form">
+             {% csrf_token %} 
+            <div class="form-group col-6">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                
+            </div>
+            <div class="form-group col-6">
+                <label for="dob">Date of Birth</label>
+                <input type="date" class="form-control" id="dob">
+            </div>
+            <div class="form-group col-6">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control " id="email" placeholder="Enter email">
+            </div>
+            <div class="form-group col-6">
+                <label for="Image">Upload Image</label>
+                <input type="file" class="form-control " id="image" placeholder="Upload Your Image">
+            </div>
+            <div class="form-group col-6">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label for="number">Phone Number</label>
+                <input type="tel" class="form-control" id="number" placeholder="Enter phone number">
+            </div>
+            
+            <div class="form-group text-center col-12 pt-4">
+                <button type="submit" class="btn btn-primary btn-outline-success text-white">Sign Up</button>
+            </div>
+        </form>
+        <div class="text-center">
+            <p>Or sign up with:</p>
+            <a href="#" class="btn btn-outline-success mr-2"><i class="fab fa-google"></i> Google</a>
+            <a href="#" class="btn btn-outline-primary"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+        <div class="text-center mt-3">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </div>
+    </div>
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+    $(document).ready(function() {
+        $('#registration-form').submit(function(event) {
+            event.preventDefault();
+    
+            var formData = new FormData();
+            formData.append('name', $('#name').val());
+            formData.append('dob', $('#dob').val());
+            formData.append('email', $('#email').val());
+            formData.append('gender', $('#gender').val());
+            formData.append('number', $('#number').val());
+            formData.append('image', $('#image')[0].files[0]);  // Get the image file
+    
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'CheckRegistration' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    if ('error' in response) {
+                        $('#error-alert').text(response.error);
+                        $('#error-alert').removeClass('d-none');
+                        $('#success-alert').addClass('d-none');
+                    } else if ('message' in response) {
+                        $('#success-alert').text(response.message);
+                        $('#success-alert').removeClass('d-none');
+                        $('#error-alert').addClass('d-none');
+                    }
+                    alert('done');
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status + ': ' + xhr.responseText);
+                }
+            });
+        });
+    });
+    
+
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

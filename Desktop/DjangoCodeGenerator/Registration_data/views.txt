@@ -1,0 +1,97 @@
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
+import random
+import string
+from django.core.mail import send_mail
+
+
+def Dashboard(request): 
+    if request.session.get('user_id'):
+        Id_Data = Registration.objects.get(id = request.session.get('user_id'))
+        context = {
+            'id_data':Id_Data,
+            "name":Id_Data.name
+        }
+
+        return render(request ,'home.html' ,context)
+    else:
+        return redirect('login/')
+
+def Login(request):
+    return render(request ,'login.html')
+
+def Regester(request):
+    return render(request ,'register.html')
+
+@csrf_exempt
+def CheckRegistration(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        number = request.POST.get('number')
+        designation = request.POST.get('designation')
+        department = request.POST.get('department')
+        image = request.FILES.get('image')  
+
+        if Registration.objects.filter(email=email).exists():
+            return JsonResponse({'error': f'This {email} Email already exists in the database.'})
+        if Registration.objects.filter(number=number).exists():
+            return JsonResponse({'error': f'This {number} Number already exists in the database.'})
+
+        # Generate a random password
+        letters = string.ascii_letters
+        numbers = string.digits
+        special_chars = string.punctuation
+        password_chars = random.sample(letters, 5) + random.sample(numbers, 5) + random.sample(special_chars, 2)
+        random.shuffle(password_chars)
+        password = ''.join(password_chars)
+
+        # Create new registration object with the generated password
+        new_registration = Registration(
+            name=name,
+            email=email,
+            number=number,
+            designation=designation,
+            department=department,
+            # image=image,
+        )
+        new_registration.set_password(password) 
+        new_registration.save()
+
+        # send main with password
+        subject = 'Password Alert'
+        message = f''' Hi...! {name} This is a test email sent using Django and Gmail 
+        but we are providing you an email with your password which you can use to login 
+        your login email is {email} and your password is {password} again your password is {password}
+hope this email send to you successfully ...!
+        '''
+        from_email = 'itscodercamp@gmail.com'
+        recipient_list = [email]
+        message = f'Hey {name}, you are registered successfully. Your password is send by mail check your gmail {email}'
+        send_mail(subject, message, from_email, recipient_list)
+        return JsonResponse({'message': message})
+
+@csrf_exempt
+def loginCheck(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = Registration.objects.get(email=email)
+        except Registration.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found.'})
+        print(user.id)
+        if check_password(password, user.password):
+            request.session['user_id'] = user.id
+            
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid email or password.'})
+
+def LogOut(request):
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    return redirect('login')
+

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://kit.fontawesome.com/cde1ffb765.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+
+    </style>
+<body >
+
+    <div class="col-lg-6 mx-auto mt-3">
+        <div class="alert alert-success d-none" role="alert" id="success-alert">
+            Login successful. you are Redirecting on Dashboard in 2.5sec 
+        </div>
+        <div class="alert alert-danger d-none" role="alert" id="error-alert">
+            Error: Invalid email or password.
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #f8f9fa;">
+
+    <div class="card p-4">
+        <h2 class="text-center">Login</h2>
+        <form method="POST" action='' id='login-form'>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    <div class="input-group-append">
+                        <button class="btn " type="button" id="showPasswordBtn"><i class="fa-regular fa-eye"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <div class="form-group text-center">
+                <a href="{% url 'Forget_Password' %}">Forgot Password?</a>
+            </div>
+        </form>
+        <div class="text-center">
+            Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Toggle password visibility
+        const showPasswordBtn = document.getElementById('showPasswordBtn');
+        const passwordInput = document.getElementById('password');
+
+        showPasswordBtn.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordBtn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            }
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#login-form').submit(function (event) {
+            event.preventDefault();
+
+            var email = $('#email').val();
+            var password = $('#password').val();
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'loginCheck' %}",
+                data: {
+                    'email': email,
+                    'password': password,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Login successful, show success message and redirect.
+                        $('#success-alert').removeClass('d-none');
+                        $('#error-alert').addClass('d-none');
+                        setTimeout(function () {
+                            window.location.href = "{% url 'dashboard' %}";
+                        }, 2500); 
+                    } else {
+                        // Login failed, show error message.
+                        $('#error-alert').removeClass('d-none');
+                        $('#success-alert').addClass('d-none');
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    alert("invalid email or password")
+                    console.log(xhr.status + ': ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

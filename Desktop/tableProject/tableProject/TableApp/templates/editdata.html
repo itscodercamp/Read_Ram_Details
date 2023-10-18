@@ -1,0 +1,105 @@
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<div class="modal fade" id="staticBackdropedit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Employee Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="container mt-4">
+                <div id="responseMessage"></div>
+                
+            <div class="form-group">
+                <label for="name">id:</label>
+                <input type="text" class="form-control id" disabled id="id" value='{{ records.id }}' placeholder="Enter your name" required /> 
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="edit-name" value='{{ records.name }}' placeholder="Enter your name" required />
+            </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="edit-email" value='{{ records.email }}' placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <label for="number">Number:</label>
+                    <input type="tel" class="form-control" id="edit-number" value='{{ records.number }}' placeholder="Enter your phone number" required />
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" class="form-control" id="edit-dob" value='{{ records.dob|date:'Y-m-d' }}' required />
+                </div>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" class="form-control" id="edit-city" value='{{ records.city }}' placeholder="Enter your city" required />
+                </div>
+                <div class="form-group">
+                    <label for="pin">PIN Code:</label>
+                    <input type="text" class="form-control" id="edit-pin" value='{{ records.pin }}' placeholder="Enter your PIN code" required />
+                </div>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="submitForm" class="btn btn-primary clicker">Add Data</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+    function open_modal(id,name,email,number,dob,city,pin){
+        $("#staticBackdropedit").modal('show')
+        $(".id").val(id)
+        $("#edit-name").val(name)
+        $("#edit-email").val(email)
+        $("#edit-number").val(number)
+        $("#edit-dob").val(dob)
+        $("#edit-city").val(city)
+        $("#edit-pin").val(pin)
+      }
+
+    $(document).ready(function() {
+  $(".clicker").click(function() {
+        var data = $('#id').val();
+        var name = $("#edit-name").val();
+        var email = $("#edit-email").val();
+        var number = $("#edit-number").val();
+        var dob = $("#edit-dob").val();
+        var city = $("#edit-city").val();
+        var pin = $("edit-#pin").val();
+
+        // Create a data object to send with the AJAX request
+        var data = {
+            'id': data,
+            'name': name,
+            'email': email,
+            'number': number,
+            'dob': dob,
+            'city': city,
+            'pin': pin
+        };
+        
+        
+        // Send an AJAX POST request to a server-side script (replace 'your_script.php' with the actual script)
+        $.ajax({
+            type: "POST",
+            url: "/edits/",
+            data: data,
+            success: function(response) {
+                swal('data edit ',response,"success")
+.then((value) => {
+    location.reload()
+});                   
+ }
+        });
+    });
+
+});
+
+
+</script>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Audio Player</title>
+    <style>
+        /* Custom CSS styles for the audio player */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .audio-card {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .audio-card h2 {
+            margin-bottom: 20px;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .play-button, .control-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .play-button:hover, .control-button:hover {
+            background-color: #2980b9;
+        }
+
+        .volume-slider {
+            width: 100px;
+        }
+
+        .gif-container {
+            margin-top: 20px;
+        }
+
+        /* Hide the file input visually and make it transparent */
+        #audio-file-input {
+            display: none;
+        }
+
+        .file-input-label {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .file-input-label:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="audio-card">
+        <h2>Custom Audio Player</h2>
+        <div class="audio-controls">
+            <label for="audio-file-input" class="file-input-label">Select Audio</label>
+            <input type="file" id="audio-file-input" accept=".mp3,.ogg,.wav">
+            <audio id="audio"></audio>
+            <button id="play-pause-button" class="play-button">Play</button>
+            <button id="backward-button" class="control-button">Backward</button>
+            <button id="forward-button" class="control-button">Forward</button>
+            <button id="prev-button" class="control-button">Prev Song</button>
+            <button id="next-button" class="control-button">Next Song</button>
+            <button id="loop-button" class="control-button">Loop</button>
+            <button id="shuffle-button" class="control-button">Shuffle</button>
+            <span id="duration">0:00 / 0:00</span>
+            <input id="volume-control" class="volume-slider" type="range" min="0" max="1" step="0.01" value="1">
+        </div>
+        <div class="gif-container">
+            <img id="gif" src="your-gif-url.gif" alt="GIF">
+        </div>
+    </div>
+
+    <script src="howler.min.js"></script>
+    <script>
+        // Define your audio sources and tracklist
+        const tracklist = [
+            { src: 'audio1.mp3', title: 'Song 1' },
+            { src: 'audio2.mp3', title: 'Song 2' },
+            // Add more tracks as needed
+        ];
+
+        const audioElement = document.getElementById('audio');
+        const playPauseButton = document.getElementById('play-pause-button');
+        const backwardButton = document.getElementById('backward-button');
+        const forwardButton = document.getElementById('forward-button');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const loopButton = document.getElementById('loop-button');
+        const shuffleButton = document.getElementById('shuffle-button');
+        const durationElement = document.getElementById('duration');
+        const volumeControl = document.getElementById('volume-control');
+        const gifElement = document.getElementById('gif');
+        const audioFileInput = document.getElementById('audio-file-input');
+
+        // Initialize Howler.js audio player
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let isLooping = false;
+        let isShuffling = false;
+
+        const audioPlayer = new Howl({
+            src: [tracklist[currentTrackIndex].src],
+            volume: 1.0,
+            loop: isLooping,
+            autoplay: false,
+            onend: playNextTrack
+        });
+
+        // Function to play the next track in the tracklist
+        function playNextTrack() {
+            if (isShuffling) {
+                currentTrackIndex = Math.floor(Math.random() * tracklist.length);
+            } else {
+                currentTrackIndex = (currentTrackIndex + 1) % tracklist.length;
+            }
+
+            loadAndPlayCurrentTrack();
+        }
+
+        // Function to load and play the current track
+        function loadAndPlayCurrentTrack() {
+            const currentTrack = tracklist[currentTrackIndex];
+            audioPlayer.unload();
+            audioPlayer.src = [currentTrack.src];
+            audioPlayer.play();
+            playPauseButton.textContent = 'Pause';
+            isPlaying = true;
+            gifElement.src = 'your-gif-url.gif'; // Change the GIF for each track
+        }
+
+        // Event listeners for control buttons
+        playPauseButton.addEventListener('click', () => {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playPauseButton.textContent = 'Play';
+            } else {
+                audioPlayer.play();
+                playPauseButton.textContent = 'Pause';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        backwardButton.addEventListener('click', () => {
+            audioPlayer.seek(audioPlayer.seek() - 10); // Rewind 10 seconds
+        });
+
+        forwardButton.addEventListener('click', () => {
+            audioPlayer.seek(audioPlayer.seek() + 10); // Fast forward 10 seconds
+        });
+
+        prevButton.addEventListener('click', () => {
+            currentTrackIndex = (currentTrackIndex - 1 + tracklist.length) % tracklist.length;
+            loadAndPlayCurrentTrack();
+        });
+
+        nextButton.addEventListener('click', () => {
+            playNextTrack();
+        });
+
+        loopButton.addEventListener('click', () => {
+            isLooping = !isLooping;
+            audioPlayer.loop(isLooping);
+        });
+
+        shuffleButton.addEventListener('click', () => {
+            isShuffling = !isShuffling;
+        });
+
+        // Update duration display and volume control
+        audioPlayer.on('load', () => {
+            const duration = Math.floor(audioPlayer.duration());
+            durationElement.textContent = `0:00 / ${formatTime(duration)}`;
+            volumeControl.value = audioPlayer.volume();
+        });
+
+        audioPlayer.on('play', () => {
+            isPlaying = true;
+        });
+
+        audioPlayer.on('pause', () => {
+            isPlaying = false;
+        });
+
+        audioPlayer.on('end', () => {
+            if (!isLooping) {
+                playNextTrack();
+            }
+        });
+
+        audioPlayer.on('timeupdate', () => {
+            const currentTime = Math.floor(audioPlayer.seek());
+            durationElement.textContent = `${formatTime(currentTime)} / ${formatTime(audioPlayer.duration())}`;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audioPlayer.volume(volumeControl.value);
+        });
+
+        // Event listener for the file input change event
+        audioFileInput.addEventListener('change', (event) => {
+            const selectedFile = event.target.files[0];
+            if (selectedFile) {
+                const objectURL = URL.createObjectURL(selectedFile);
+                audioPlayer.unload();
+                audioPlayer.src = [objectURL];
+                loadAndPlayCurrentTrack();
+            }
+        });
+
+        // Format time in seconds to MM:SS format
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Start playing the first track
+        loadAndPlayCurrentTrack();
+    </script>
+</body>
+</html>

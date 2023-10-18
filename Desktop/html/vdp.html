@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Video Player</title>
+    <style>
+        /* Custom CSS styles for the video player */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .video-player {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .play-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .play-button:hover {
+            background-color: #2980b9;
+        }
+
+        .volume-slider {
+            width: 100px;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-player">
+        <h2>Custom Video Player</h2>
+        <video id="video" controls>
+            <source src="video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-controls">
+            <button id="play-pause-button" class="play-button">Play</button>
+            <input id="volume-control" class="volume-slider" type="range" min="0" max="1" step="0.01" value="1">
+        </div>
+    </div>
+
+    <script src="mediaelement-and-player.min.js"></script>
+    <script>
+        const videoPlayer = new MediaElementPlayer('video', {
+            features: ['playpause', 'current', 'progress', 'duration', 'volume', 'fullscreen'],
+            success: function (mediaElement) {
+                const playPauseButton = document.getElementById('play-pause-button');
+                const volumeControl = document.getElementById('volume-control');
+
+                playPauseButton.addEventListener('click', () => {
+                    if (mediaElement.paused) {
+                        mediaElement.play();
+                        playPauseButton.textContent = 'Pause';
+                    } else {
+                        mediaElement.pause();
+                        playPauseButton.textContent = 'Play';
+                    }
+                });
+
+                volumeControl.addEventListener('input', () => {
+                    mediaElement.setVolume(volumeControl.value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

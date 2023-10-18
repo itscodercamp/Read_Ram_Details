@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Sasta Code Generator{% endblock title %}
+{% load static %}
+
+{% block body %}
+<div class="container text-center ">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand">Navbar</a>
+          <div class="d-flex">
+            <a href="{% url 'logout' %}" class="btn btn-danger me-2">Logout</a>
+          </div>
+        </div>
+      </nav>
+<h1 class="container text-center">What We are Offering as an basic imports</h1>
+<p class="container text-center mt-5 mb-5 animate__animated animate__pulse">
+    Bootstrap css js , Animate.css and SweetAlert adding more soon.....! &#128150;
+    <i class="fa-solid fa-house"></i>
+</p>
+<img src="{% static 'images/welcome.gif' %}" alt="" class="img-fluid ">
+</div>
+<script>
+
+</script>
+{% endblock body %}

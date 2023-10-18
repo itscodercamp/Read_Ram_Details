@@ -1,0 +1,97 @@
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<ul class="nav justify-content-center mb-5 animate__animated animate__backInUp">
+    <li class="nav-item">
+      <a class="nav-link text-danger btn btn-warning mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="{% url 'add' %}">Add Records</a>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link text-success btn btn-light" >Download CSV</button>
+    </li>
+  
+  </ul>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Employee Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+          <div class="container mt-4">
+            <div id="responseMessage"></div>
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" autocomplete="given-name" placeholder="Enter your name" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" autocomplete="given-email" placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <label for="number">Number:</label>
+                    <input type="tel" class="form-control" id="number" placeholder="Enter your phone number" required />
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" class="form-control" id="dob"  required />
+                </div>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" class="form-control" id="city" placeholder="Enter your city" required />
+                </div>
+                <div class="form-group">
+                    <label for="pin">PIN Code:</label>
+                    <input type="text" class="form-control" id="pin" placeholder="Enter your PIN code" required />
+                </div>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="submitForm" class="btn btn-primary">Add Data</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+$(document).ready(function() {
+    $("#submitForm").click(function() {
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var number = $("#number").val();
+        var dob = $("#dob").val();
+        var city = $("#city").val();
+        var pin = $("#pin").val();
+console.log(dob)
+        // Create a data object to send with the AJAX request
+        var data = {
+            'name': name,
+            'email': email,
+            'number': number,
+            'dob': dob,
+            'city': city,
+            'pin': pin
+        };
+
+        // Send an AJAX POST request to a server-side script (replace 'your_script.php' with the actual script)
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add' %}",
+            data: data,
+            success: function(response) {
+                swal('data added ',response,"success")
+.then((value) => {
+  location.reload()
+});
+                // location.reload()
+            }
+        });
+    });
+});
+</script>

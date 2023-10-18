@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Registration Page
+{% endblock title %}
+{% block body %}
+
+<div class="col-10 mx-auto mt-3">
+    <div class="alert alert-info d-none shadow" role="alert" id="success-alert">
+        
+    </div>
+    <div class="alert alert-danger d-none shadow" role="alert" id="error-alert">
+
+    </div>
+</div>
+
+<div class="container row mx-auto mt-5 ">
+
+    <div class="container col-lg-6 d-none d-lg-block text-center"><h2>You Are Just Two Step Away </h2>
+    <img src="{% static 'images/dd.gif' %}" alt="" class="px-5 mt-3  img-fluid h-75 rounded-5 rounded-bottom-pill">
+    </div>
+    
+<form action="{% url 'CheckRegistration' %}" class="col-lg-6 pb-5 mx-auto shadow-lg rounded-4 pb-1 " id='registration-form' enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <h2  class='text-center pb-4'>Registration Page</h2>
+    <div class="col-12 pb-3">
+        <label for="" class="">Name</label>
+        <input type="text" class="form-control" name="name" id="name" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="" class="">Number</label>
+        <input type="number" class="form-control" name="number" id="number" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="" class="">Email</label>
+        <input type="email" class="form-control" name="email" id="email" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="" class="">Designation</label>
+        <input type="text" class="form-control" name="designation" id="designation" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="" class="">Department</label>
+        <input type="text" class="form-control" name="department" id="department" required>
+    </div>
+    {% comment %} <div class="col-12 pb-3">
+        <label for="" class="">Profile <Picture></Picture></label>
+        <input type="file" class="form-control" name="image" id="image" required>
+    </div> {% endcomment %}
+    <div class="col-4 pt-3 mx-auto text-center">
+        <button type="submit" class="form-control btn btn-warning" name="submit" id="submit">Register</button>
+    </div>
+    <div class="col-4 ">
+        <a href="{% url 'login' %}" class='text-black' >Already Have an Account</a>
+    </div>
+    <div class="col-4  mx-auto">
+    </div>
+
+</form>
+</div>
+
+<script>
+    $('#registration-form').submit(function (event) {
+        event.preventDefault();
+
+    var name = $('#name').val();
+    var email = $('#email').val();
+    var number = $('#number').val();
+    var designation = $('#designation').val();
+    var department = $('#department').val();
+    //var image = $('#image').val();
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'CheckRegistration' %}",
+        data: {
+            'name': name,
+            'email': email,
+            'number': number,
+            'designation': designation,
+            'department':department,
+        },
+        dataType: 'json',
+
+        success: function (response) {
+            if ('error' in response) {
+                $('#error-alert').text(response.error);
+                $('#error-alert').removeClass('d-none');
+                $('#success-alert').addClass('d-none');
+            } else if ('message' in response) {
+                $('#success-alert').text(response.message);
+                $('#success-alert').removeClass('d-none');
+                $('#error-alert').addClass('d-none');
+            }
+        },
+        error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ': ' + xhr.responseText)
+
+        }
+      });
+    });
+</script>
+
+  
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+{% endblock body %}

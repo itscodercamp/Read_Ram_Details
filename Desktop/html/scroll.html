@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Scrollable List with Fixed Search Bar</title>
+    <style>
+        /* Define the size for the container */
+        .container-box {
+            width: 255px;
+            height: 650px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        /* Define the size for the list and enable scrolling */
+        .scrollable-list {
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        /* Add some padding for the list items */
+        .list-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Style the search bar */
+        .search-bar {
+            background-color: #f5f5f5;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        /* Style the custom scrollbar for WebKit browsers (Chrome, Safari) */
+        .scrollable-list::-webkit-scrollbar {
+            width: 10px;/* Adjust the scrollbar width as needed */
+        }
+        
+        .scrollable-list::-webkit-scrollbar-thumb {
+            background-color: #007BFF; /* Customize the scrollbar thumb color */
+            height: 10px;
+        }
+
+        .scrollable-list::-webkit-scrollbar-track {
+            background-color: #f5f5f5; /* Customize the scrollbar track color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-box">
+        <div class="search-bar">
+            <!-- Your search bar content goes here -->
+            <input type="text" class="form-control" id="searchInput" placeholder="Search..." onkeyup="filterList()">
+        </div>
+        <div class="scrollable-list">
+            <!-- Movie list items -->
+            <div class="list-item">Avengers: Endgame</div>
+            <div class="list-item">The Shawshank Redemption</div>
+            <div class="list-item">The Godfather</div>
+            <div class="list-item">The Dark Knight</div>
+            <div class="list-item">Pulp Fiction</div>
+            <div class="list-item">Fight Club</div>
+            <div class="list-item">Forrest Gump</div>
+            <div class="list-item">Inception</div>
+            <div class="list-item">The Matrix</div>
+            <div class="list-item">Schindler's List</div>
+            <div class="list-item">Gladiator</div>
+            <div class="list-item">Braveheart</div>
+            <div class="list-item">The Lord of the Rings: The Fellowship of the Ring</div>
+            <div class="list-item">The Silence of the Lambs</div>
+            <div class="list-item">Goodfellas</div>
+            <div class="list-item">The Departed</div>
+            <div class="list-item">The Usual Suspects</div>
+            <div class="list-item">The Terminator</div>
+            <div class="list-item">The Lion King</div>
+            <div class="list-item">Jurassic Park</div>
+            <div class="list-item">E.T. the Extra-Terrestrial</div>
+            <div class="list-item">Star Wars: Episode IV - A New Hope</div>
+            <div class="list-item">Raiders of the Lost Ark</div>
+            <div class="list-item">The Shawshank Redemption</div>
+            <div class="list-item">The Godfather</div>
+            <div class="list-item">The Dark Knight</div>
+            <div class="list-item">Pulp Fiction</div>
+            <div class="list-item">Fight Club</div>
+            <div class="list-item">Forrest Gump</div>
+            <div class="list-item">Inception</div>
+            <div class="list-item">The Matrix</div>
+            <div class="list-item">Schindler's List</div>
+            <div class="list-item">Gladiator</div>
+            <div class="list-item">Braveheart</div>
+            <div class="list-item">The Lord of the Rings: The Fellowship of the Ring</div>
+            <!-- Add more movie names as needed -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function filterList() {
+            var input, filter, list, listItem, text, i;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            list = document.querySelector(".scrollable-list");
+            listItem = list.getElementsByClassName("list-item");
+
+            for (i = 0; i < listItem.length; i++) {
+                text = listItem[i].textContent || listItem[i].innerText;
+                if (text.toUpperCase().indexOf(filter) > -1) {
+                    listItem[i].style.display = "";
+                } else {
+                    listItem[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

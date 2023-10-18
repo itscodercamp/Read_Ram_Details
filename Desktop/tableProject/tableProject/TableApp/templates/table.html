@@ -1,0 +1,37 @@
+<table class="table mt-5" id="myTable">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Number</th>
+        <th scope="col">DOB</th>
+        <th scope="col">City</th>
+        <th scope="col">pin</th>
+        <th scope="col">View</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for records in TB_Data %}
+      <tr>
+        <th scope="row">{{ records.id }}</th>
+        <td>{{ records.name }}</td>
+        <td>{{ records.email }}</td>
+        <td>{{ records.number }}</td>
+        <td>{{ records.dob }}</td>
+        <td>{{ records.city }}</td>
+        <td>{{ records.pin }}</td>
+
+        <td>
+          <button  class="nav-linkwhite text- btn btn-primary" type="button" onclick="open_modal('{{records.id}}',
+          '{{records.name}}','{{records.email}}','{{records.number}}','{{records.dob|date:"Y-m-d" }}','{{records.city}}','{{records.pin}}')">edit</button>
+          <button type="button" class="btn btn-danger" onclick='delete_func("{{ records.id}}")' >delete</button>
+
+        </td>
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include 'editdata.html' %}
+  {% include "delete.html" %}

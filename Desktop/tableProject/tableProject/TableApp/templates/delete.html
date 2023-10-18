@@ -1,0 +1,40 @@
+<script>
+    function delete_func(user_id) {
+      var datas = {
+          'id': user_id
+      }
+  
+      // Display a SweetAlert confirmation dialog
+      swal({
+          title: "Are you sure?",
+          text: "You want to delete this!",
+          icon: "warning",
+          buttons: {
+              confirm: "Yes",
+              cancel: "No"
+          },
+          dangerMode: true,
+      }).then((willDelete) => {
+          if (willDelete) {
+              // If the user confirms the deletion, make an AJAX request to delete the data
+              $.ajax({
+                  type: "POST",
+                  url: "/delete/",
+                  data: datas,
+                  success: function (response) {
+                      swal("Poof! Your data has been deleted!", {
+                          icon: "success",
+                      });
+                      setTimeout(function () {
+                        location.reload();
+                    }, 2000);                  }
+              });
+          } else {
+              // If the user cancels the deletion, display a message
+              swal("Data is not deleted.");
+          }
+      });
+  }
+  
+    </script>
+   

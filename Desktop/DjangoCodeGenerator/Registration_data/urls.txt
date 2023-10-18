@@ -1,0 +1,13 @@
+# home page area
+path('Dashboard/', views.Dashboard,name='dashboard'),
+
+# registration login and logout urls area
+path('login/', views.Login,name='login'),
+path('Registration/', views.Regester,name='regester'),
+
+# CheckRegistration area
+path('CheckRegistration/', views.CheckRegistration,name='CheckRegistration'),
+# loginCheck area
+path('loginCheck/', views.loginCheck,name='loginCheck'),
+# logout url
+path('Logout/', views.LogOut,name='logout'),

@@ -1,0 +1,23 @@
+from django.db import models
+
+# Create your models here.
+
+
+from django.contrib.auth.hashers import make_password, check_password
+
+
+class Registration(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    number = models.CharField(max_length=20)
+    designation = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='media/Registration_images/')
+    password = models.TextField(max_length=128, blank=True) 
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+
+    def __str__(self):
+        return self.name

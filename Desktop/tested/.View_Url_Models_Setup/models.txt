@@ -1,0 +1,12 @@
+
+class Registration(models.Model):
+    name = models.CharField(max_length=55)
+    email = models.EmailField()
+    dob = models.DateField(null=True)
+    gender = models.CharField(max_length=15)
+    number = models.IntegerField()
+    password = models.CharField(max_length=25)
+    image = models.ImageField(upload_to = 'media/', blank=True, null=True)
+
+    def __str__(self):
+        return self.name

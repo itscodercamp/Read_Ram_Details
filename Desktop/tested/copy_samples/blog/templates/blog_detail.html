@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock title %}
+
+{% block body %}
+    <div>
+        <img src="{{ post.image.url }}" class='img-fluid' alt="{{ post.title }}">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.description }}</p>
+        <!-- Add more content/details of the blog post here -->
+    </div>
+{% endblock body %}

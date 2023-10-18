@@ -1,0 +1,166 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Whiteboard</title>
+    <style>
+        #whiteboard {
+            border: 2px solid #000;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="whiteboard" width="800" height="400"></canvas>
+    <button id="clear-button">Clear</button>
+    <script>
+        const canvas = document.getElementById("whiteboard");
+        const context = canvas.getContext("2d");
+        let drawing = false;
+        canvas.addEventListener("mousedown", () => {
+            drawing = true;
+            context.beginPath();
+        });
+        canvas.addEventListener("mousemove", (e) => {
+            if (!drawing) return;
+            context.lineWidth = 2;
+            context.lineCap = "round";
+            context.strokeStyle = "black";
+            context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            context.stroke();
+        });
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+        });
+        document.getElementById("clear-button").addEventListener("click", () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard with Controls</title>
+    <style>
+        #whiteboard {
+            border: 2px solid #000;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="whiteboard" width="800" height="400"></canvas>
+    <div>
+        <label for="color-picker">Select Color:</label>
+        <input type="color" id="color-picker" value="#000000">
+        <label for="pen-size">Pen Size:</label>
+        <input type="number" id="pen-size" value="2" min="1" max="10">
+        <button id="clear-button">Clear</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("whiteboard");
+        const context = canvas.getContext("2d");
+        let drawing = false;
+
+        canvas.addEventListener("mousedown", () => {
+            drawing = true;
+            context.beginPath();
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (!drawing) return;
+
+            const color = document.getElementById("color-picker").value;
+            const penSize = document.getElementById("pen-size").value;
+
+            context.lineWidth = penSize;
+            context.lineCap = "round";
+            context.strokeStyle = color;
+
+            context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            context.stroke();
+        });
+
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+        });
+
+        document.getElementById("clear-button").addEventListener("click", () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard with Controls</title>
+    <style>
+        #whiteboard {
+            border: 2px solid #000;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="whiteboard" width="800" height="400"></canvas>
+    <div>
+        <label for="color-picker">Select Color:</label>
+        <input type="color" id="color-picker" value="#000000">
+        <label for="pen-size">Pen Size:</label>
+        <input type="number" id="pen-size" value="2" min="1" max="10">
+        <label for="bg-color-picker">Canvas Background Color:</label>
+        <input type="color" id="bg-color-picker" value="#ffffff">
+        <button id="clear-button">Clear</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("whiteboard");
+        const context = canvas.getContext("2d");
+        let drawing = false;
+
+        canvas.addEventListener("mousedown", () => {
+            drawing = true;
+            context.beginPath();
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (!drawing) return;
+
+            const color = document.getElementById("color-picker").value;
+            const penSize = document.getElementById("pen-size").value;
+
+            context.lineWidth = penSize;
+            context.lineCap = "round";
+            context.strokeStyle = color;
+
+            context.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            context.stroke();
+        });
+
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+        });
+
+        document.getElementById("clear-button").addEventListener("click", () => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        document.getElementById("bg-color-picker").addEventListener("input", () => {
+            const bgColor = document.getElementById("bg-color-picker").value;
+            canvas.style.backgroundColor = bgColor;
+        });
+    </script>
+</body>
+</html>
+

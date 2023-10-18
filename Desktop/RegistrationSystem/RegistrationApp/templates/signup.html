@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Sasta Code Generator{% endblock title %}
+{% load static %}
+
+{% block body %}
+
+<div class="container row mx-auto mt-5 ">
+
+    <div class="container col-lg-6 d-none d-lg-block text-center"><h2>You Are Just Two Step Away </h2>
+    <img src="{% static 'images/robo.gif' %}" alt="" class="px-5 mt-3  img-fluid h-75 rounded-5 rounded-bottom-pill">
+    </div>
+    
+<div  class="col-lg-6 pb-5 mx-auto shadow-lg rounded-4 pb-1 " id='registration-form' >
+    {% csrf_token %}
+    <h2  class='text-center pb-4'>Registration Page</h2>
+    <div class="col-12 pb-3">
+        <label for="name" class="">Name</label>
+        <input type="text" class="form-control" name="name" id="name" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="email" class="">Email</label>
+        <input type="email" class="form-control" name="email" id="email" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="number" class="">Number</label>
+        <input type="tel" class="form-control" name="number" id="number" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="password" class="">Password</label>
+        <input type="password" class="form-control" name="password" id="password" required>
+    </div>
+    <div class="col-12 pb-3">
+        <label for="confirm_password" class="">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+    </div>
+
+    <div class="col-4 pt-3 mx-auto text-center">
+        <button type="submit" class="form-control btn btn-warning" name="submit" id="submit">Register</button>
+    </div>
+    <div class="col-4 ">
+        <a href="{% url 'login' %}" class='text-black' >Already Have an Account</a>
+    </div>
+    <div class="col-4  mx-auto">
+    </div>
+
+</div>
+</div>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('#submit').click(function (e) { 
+            e.preventDefault();
+            var name = $('#name').val()
+            var email = $('#email').val()
+            var number = $('#number').val()
+            var password = $('#password').val()
+            var confirm_password = $('#confirm_password').val()
+            $.ajax({
+                type: "POST",
+                url: "{% url 'signup_check' %}",
+                data: {
+                    'name':name,
+                    'email':email,
+                    'number':number,
+                    'password':password,
+                    'confirm_password':confirm_password,
+                },
+                success: function (response) {
+                    swal({
+            title: 'Successfully registered',
+            icon: 'success',
+            button: 'OK', 
+        })      
+                },
+                error: function (xhr, errmsg, err) {
+                    alert('sorry',xhr.status ,errmsg,err)
+                }
+                            
+            });
+        });
+    });
+</script>
+
+{% endblock body %}
